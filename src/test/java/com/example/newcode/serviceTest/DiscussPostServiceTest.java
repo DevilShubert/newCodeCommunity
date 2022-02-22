@@ -26,6 +26,7 @@ public class DiscussPostServiceTest {
 
     @Test
     public void pageCountTest(){
+        // 总共多条数据
         System.out.println(discussPostService.selectDiscussPosts(0));
     }
 }
