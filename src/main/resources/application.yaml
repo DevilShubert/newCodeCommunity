@@ -1,0 +1,24 @@
+# 应用名称
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/community?serverTimezone=UTC
+      username: root
+      password: LIUzheran..123
+
+  thymeleaf:
+    cache: false
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+server:
+  port: 85
+  servlet:
+    context-path: /community
