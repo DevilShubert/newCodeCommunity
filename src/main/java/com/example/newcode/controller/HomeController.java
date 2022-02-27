@@ -7,12 +7,18 @@ import com.example.newcode.entity.MyPage;
 import com.example.newcode.entity.User;
 import com.example.newcode.service.DiscussPostService;
 import com.example.newcode.service.UserService;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +31,6 @@ public class HomeController {
 
     @Autowired
     UserService userService;
-
 
     @RequestMapping(value = "/indexPage", method = RequestMethod.GET)
     public String getIndexPage(Model model, MyPage page){
@@ -55,4 +60,8 @@ public class HomeController {
         model.addAttribute("page", page);
         return "index";
     }
+
+
+
+
 }

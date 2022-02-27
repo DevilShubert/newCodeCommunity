@@ -5,6 +5,7 @@ import com.example.newcode.entity.User;
 
 import java.util.List;
 
+
 public interface UserService extends IService<User> {
     public List<User> selectByName(String name);
 
@@ -14,9 +15,11 @@ public interface UserService extends IService<User> {
 
     Boolean insertUser(User user);
 
-    Boolean updateStatus(int id, int status);
+    Boolean updateStatus(int id, int status, User user);
 
-    Boolean updateHeader(int id, String headerUrl);
+    Boolean updateHeader(int id, String headerUrl, User user);
 
-    Boolean updatePassword(int id, String password);
+    Boolean updatePassword(int id, String password, User user);
+
+
 }

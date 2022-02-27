@@ -6,9 +6,23 @@ spring:
       url: jdbc:mysql://localhost:3306/community?serverTimezone=UTC
       username: root
       password: LIUzheran..123
-
   thymeleaf:
     cache: false
+  mail:
+    host: smtp.163.com
+    protocol: smtp
+    default-encoding: UTF-8
+    username: liuzheran163@163.com
+    password: CDOVKVTIVKUSLISM
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
 
 mybatis-plus:
   global-config:
@@ -16,9 +30,17 @@ mybatis-plus:
       id-type: auto
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 对自动生成的ID自动回填
+    use-generated-keys: true
 
 
 server:
   port: 85
   servlet:
     context-path: /community
+
+#community
+community:
+  path:
+    domain: http://localhost:85
+    upload: /Users/liuzheran/Desktop/学习笔记/后端部分/springBoot/项目/NewCode/newCodeImages

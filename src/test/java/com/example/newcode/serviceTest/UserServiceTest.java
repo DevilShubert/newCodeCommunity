@@ -21,8 +21,10 @@ public class UserServiceTest {
 
         List<User> users2 = userService.selectByName("nowcoder11");
         System.out.println(users2);
+        for (User user:users2) {
+            userService.updateStatus(149, 0, user);
+        }
 
-        userService.updateStatus(149, 0);
     }
 
     @Test

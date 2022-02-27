@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.newcode.dao.UserDao;
 import com.example.newcode.entity.User;
 import com.example.newcode.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -46,31 +48,29 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
     }
 
     @Override
-    public Boolean updateStatus(int id, int status) {
+    public Boolean updateStatus(int id, int status, User user) {
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",id);
-        User user = new User();
         user.setStatus(status);
         return userDao.update(user, updateWrapper) > 0;
     }
 
     @Override
-    public Boolean updateHeader(int id, String headerUrl) {
+    public Boolean updateHeader(int id, String headerUrl, User user) {
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",id);
-        User user = new User();
         user.setHeaderUrl(headerUrl);
         return userDao.update(user, updateWrapper) > 0;
     }
 
     @Override
-    public Boolean updatePassword(int id, String password) {
+    public Boolean updatePassword(int id, String password, User user) {
         UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id",id);
-        User user = new User();
         user.setPassword(password);
         return userDao.update(user, updateWrapper) > 0;
     }
+
 
 
 }
