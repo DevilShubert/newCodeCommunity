@@ -1,6 +1,5 @@
 package com.example.newcode.entity;
 
-import jdk.jfr.DataAmount;
 import lombok.Data;
 
 import java.util.Date;

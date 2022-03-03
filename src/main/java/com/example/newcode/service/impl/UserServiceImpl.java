@@ -70,7 +70,4 @@ public class UserServiceImpl extends ServiceImpl<UserDao, User> implements UserS
         user.setPassword(password);
         return userDao.update(user, updateWrapper) > 0;
     }
-
-
-
 }

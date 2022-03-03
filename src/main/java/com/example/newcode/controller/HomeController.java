@@ -34,7 +34,8 @@ public class HomeController {
 
     @RequestMapping(value = "/indexPage", method = RequestMethod.GET)
     public String getIndexPage(Model model, MyPage page){
-
+        // MVC帮忙实现了类Mypage
+        // 当第一次访问indexPage页面时，是没有提交任何page数据的，但是MVC会自动实例化一个对象
         IPage<DiscussPost> postIPage = discussPostService.selectMapsPage(0, page.getCurrent(), page.getLimit());
         int size = postIPage.getRecords().size();
 

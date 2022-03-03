@@ -7,9 +7,9 @@ import java.util.List;
 
 
 public interface UserService extends IService<User> {
-    public List<User> selectByName(String name);
+    List<User> selectByName(String name);
 
-    public User selectById(int id);
+    User selectById(int id);
 
     List<User> selectByEmail(String email);
 

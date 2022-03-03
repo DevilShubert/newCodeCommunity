@@ -3,7 +3,6 @@ package com.example.newcode.serviceTest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.newcode.entity.DiscussPost;
 import com.example.newcode.service.DiscussPostService;
-import com.example.newcode.service.impl.DiscussPostServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +26,12 @@ public class DiscussPostServiceTest {
     @Test
     public void pageCountTest(){
         // 总共多条数据
-        System.out.println(discussPostService.selectDiscussPosts(0));
+        System.out.println(discussPostService.selectDiscussPostsByUserID(0));
+    }
+
+    @Test
+    public void updateCommentCountTest(){
+        DiscussPost post = discussPostService.selectDiscussPostsByPostID(284);
+        discussPostService.updateCommentCount(post, 1);
     }
 }
