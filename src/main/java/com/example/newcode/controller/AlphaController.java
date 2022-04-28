@@ -7,11 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class AlphaController {
 
-    @RequestMapping("/alpha")
-    @ResponseBody
-    public String aopLog(){
-
-        return "test";
-    }
-
+	@RequestMapping("/alpha")
+	@ResponseBody
+	public String aopLog() {
+		return "test";
+	}
 }

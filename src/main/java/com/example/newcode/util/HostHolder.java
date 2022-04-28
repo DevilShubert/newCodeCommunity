@@ -3,26 +3,25 @@ package com.example.newcode.util;
 import com.example.newcode.entity.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 /**
  * 用于存储当前线程的变量
  */
 
 @Component
 public class HostHolder {
-    private ThreadLocal<User> userThreadLocal =  new ThreadLocal<User>();
+	// 当前线程
+	private ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
 
-    public void setUser(User user) {
-        // 如果重复set则会覆盖之前存的user
-        this.userThreadLocal.set(user);
-    }
+	public void setUser(User user) {
+		// 如果重复set则会覆盖之前存的user
+		this.userThreadLocal.set(user);
+	}
 
-    public User getUser() {
-        return userThreadLocal.get();
-    }
+	public User getUser() {
+		return userThreadLocal.get();
+	}
 
-    public void clear(){
-        userThreadLocal.remove();
-    }
+	public void clear() {
+		userThreadLocal.remove();
+	}
 }
