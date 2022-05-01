@@ -6,6 +6,7 @@ import com.example.newcode.event.EventProducer;
 import com.example.newcode.service.LikeService;
 import com.example.newcode.util.CommunityUtils;
 import com.example.newcode.util.HostHolder;
+import com.example.newcode.util.RedisUtils;
 import com.example.newcode.util.constant.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class LikeController implements CommunityConstant {
 
 	@Autowired
 	private EventProducer eventProducer;
+
+	@Autowired
+	RedisUtils redisUtils;
 
 	/**
 	 * 执行点赞或者取消点赞功能
@@ -64,6 +68,12 @@ public class LikeController implements CommunityConstant {
 					setEntityUserId(entityUserId). // 被点赞的用户id
 					setData("postId", postId); // 点赞只能对帖子或者comment点赞，这都是属于一个帖子下的，所以为了跳转带上postId
 			eventProducer.fireEvent(event);
+		}
+
+		// 只有对帖子点赞或取消赞才将帖子id加入到Redis定时任务的set集合中
+		if (entityType == ENTITY_TARGET_POST) {
+			String scoreKey = RedisUtils.getPostScoreKey();
+			redisUtils.sSet(scoreKey, postId);
 		}
 		return CommunityUtils.getJSONString(0, null, map);
 	}

@@ -11,6 +11,7 @@ import com.example.newcode.service.UserService;
 import com.example.newcode.service.elasticsearch.ElasticsearchService;
 import com.example.newcode.util.CommunityUtils;
 import com.example.newcode.util.HostHolder;
+import com.example.newcode.util.RedisUtils;
 import com.example.newcode.util.constant.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +46,9 @@ public class PostController implements CommunityConstant {
 
 	@Autowired
 	EventProducer eventProducer;
+
+	@Autowired
+	RedisUtils redisUtils;
 
 	/**
 	 * 异步插入一条帖子
@@ -227,6 +231,9 @@ public class PostController implements CommunityConstant {
 		Event event = new Event().setTopic(TOPIC_PUBLISH).setUserId(hostHolder.getUser().getId()).setEntityType(
 				ENTITY_TARGET_POST).setEntityId(id);
 		eventProducer.fireEvent(event);
+
+		String scoreKey = RedisUtils.getPostScoreKey();
+		redisUtils.sSet(scoreKey, id);
 
 		return CommunityUtils.getJSONString(0);
 	}

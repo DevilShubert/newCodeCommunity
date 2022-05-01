@@ -9,6 +9,7 @@ import com.example.newcode.event.EventProducer;
 import com.example.newcode.service.CommentService;
 import com.example.newcode.service.DiscussPostService;
 import com.example.newcode.util.HostHolder;
+import com.example.newcode.util.RedisUtils;
 import com.example.newcode.util.constant.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,9 @@ public class CommentController implements CommunityConstant {
 
 	@Autowired
 	EventProducer eventProducer;
+
+	@Autowired
+	RedisUtils redisUtils;
 
 	/**
 	 * 增加一条comment
@@ -82,6 +86,11 @@ public class CommentController implements CommunityConstant {
 			event = new Event().setTopic(TOPIC_PUBLISH).setUserId(comment.getUserId()).setEntityType(
 					ENTITY_TARGET_POST).setEntityId(discussPost.getId());
 			eventProducer.fireEvent(event);
+		}
+		// 如果是回帖，则将帖子id加入到Redis定时任务的set集合中
+		if (comment.getEntityType() == ENTITY_TARGET_POST) {
+			String scoreKey = RedisUtils.getPostScoreKey();
+			redisUtils.sSet(scoreKey, postID);
 		}
 		return "redirect:/discuss/detail/" + postID;
 	}

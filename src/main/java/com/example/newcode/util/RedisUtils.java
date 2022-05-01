@@ -33,6 +33,7 @@ public class RedisUtils {
 	private static final String PREFIX_USER = "user";
 	private static final String PREFIX_UV = "uv";
 	private static final String PREFIX_DAU = "dau";
+	private static final String PREFIX_POST = "post";
 
 	/**
 	 * 某个被点赞实体的setName 即 like:entity:entityType:entityId -> set(userId)
@@ -110,6 +111,11 @@ public class RedisUtils {
 	// 区间活跃用户 格式为：dau:yyyyMMdd(start):yyyyMMdd(end)
 	public static String getDAUKey(String startDate, String endDate) {
 		return PREFIX_DAU + SPLIT + startDate + SPLIT + endDate;
+	}
+
+	// 帖子分数 格式为：post:score
+	public static String getPostScoreKey() {
+		return PREFIX_POST + SPLIT + "score";
 	}
 
 	// =============================String====================================
@@ -364,6 +370,15 @@ public class RedisUtils {
 	public Set<Object> sGet(String key) {
 		try {
 			return redisTemplate.opsForSet().members(key);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Object sRandomGet(String key) {
+		try {
+			return redisTemplate.opsForSet().pop(key);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

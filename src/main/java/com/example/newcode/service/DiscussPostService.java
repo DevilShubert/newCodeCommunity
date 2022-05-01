@@ -6,14 +6,13 @@ import com.example.newcode.entity.DiscussPost;
 
 public interface DiscussPostService extends IService<DiscussPost> {
 	/**
-	 * select all posts by pagination
-	 *
-	 * @param userID   用户id
+	 * @param userID   用户id，作用是查找某一用户的帖子，如果是查找所有帖子则id=0
 	 * @param curPage  当前页号
 	 * @param pageSize 一页的大小
+	 * @param useScore 排序顺序是否加上用户分数
 	 * @return
 	 */
-	IPage<DiscussPost> selectMapsPage(int userID, int curPage, int pageSize);
+	IPage<DiscussPost> selectMapsPage(int userID, int curPage, int pageSize, int useScore);
 
 	/**
 	 * select one post by userID
@@ -65,4 +64,13 @@ public interface DiscussPostService extends IService<DiscussPost> {
 	 * @return
 	 */
 	Boolean updateStatus(DiscussPost post, int status);
+
+	/**
+	 * 更新帖子的分数
+	 *
+	 * @param post
+	 * @param score
+	 * @return
+	 */
+	Boolean updateScore(DiscussPost post, double score);
 }

@@ -8,6 +8,8 @@ import com.example.newcode.service.UserService;
 import com.example.newcode.util.CommunityUtils;
 import com.example.newcode.util.HostHolder;
 import com.example.newcode.util.constant.CommunityConstant;
+import com.qiniu.util.Auth;
+import com.qiniu.util.StringMap;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -51,6 +54,18 @@ public class UserController implements CommunityConstant {
 	@Value("${server.servlet.context-path}")
 	String context;
 
+	@Value("${qiniu.key.access}")
+	String accessKey;
+
+	@Value("${qiniu.key.secret}")
+	String secretKey;
+
+	@Value("${qiniu.bucket.header.name}") // header的空间名
+	private String headerBucketName;
+
+	@Value("${qiniu.bucket.header.url}") // header空间的域名
+	private String headerBucketUrl;
+
 	/**
 	 * 返回前端的设置页面
 	 *
@@ -58,12 +73,43 @@ public class UserController implements CommunityConstant {
 	 */
 	@RequestMapping("/setting")
 	@LoginRequired
-	public String settingPage() {
+	public String getSettingPage(Model model) {
+		// 上传文件名称
+		String fileName = CommunityUtils.getRandomUUID();
+		// 设置期望从七牛云服务端获得的响应信息
+		StringMap policy = new StringMap();
+		// 希望七牛云上传的结果是一个异步响应
+		policy.put("returnBody", CommunityUtils.getJSONString(0));
+		// 生成上传凭证
+		Auth auth = Auth.create(accessKey, secretKey);
+		String uploadToken = auth.uploadToken(headerBucketName, fileName, 3600, policy);
+
+		model.addAttribute("uploadToken", uploadToken);
+		model.addAttribute("fileName", fileName);
+
 		return "/site/setting";
 	}
 
 	/**
-	 * 执行用户更新头像的操作
+	 * 使用七牛云后更新header_url字段的值
+	 * @param fileName
+	 * @return
+	 */
+	@RequestMapping(path = "/header/url/{fileName}", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateHeaderUrl(@PathVariable("fileName") String fileName) {
+		if (StringUtils.isBlank(fileName)) {
+			return CommunityUtils.getJSONString(1, "文件名不能为空!");
+		}
+
+		String url = headerBucketUrl + "/" + fileName;
+		userService.updateHeader(hostHolder.getUser().getId(), url, hostHolder.getUser());
+		return CommunityUtils.getJSONString(0);
+	}
+
+
+	/**
+	 * 执行用户更新头像的操作（不再使用）
 	 *
 	 * @param imageFile
 	 * @param model
@@ -109,7 +155,7 @@ public class UserController implements CommunityConstant {
 	}
 
 	/**
-	 * 获得用户头像并返回给前端页面
+	 * 获得用户头像并返回给前端页面（不完全不再使用）
 	 *
 	 * @param fileName
 	 * @param response

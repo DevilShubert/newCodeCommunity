@@ -1,4 +1,3 @@
-# 应用名称
 spring:
   datasource:
     druid:
@@ -27,36 +26,97 @@ spring:
     host: localhost
     port: 6379
     database: 11
-    # KafkaProperties
+    # Kafka Properties
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
       group-id: test-consumer-group
       enable-auto-commit: true
       auto-commit-interval: 3000
-  data:
-    elasticsearch:
+  # Spring TheadPool
+  task:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 15
+        queue-capacity: 100
+    scheduling:
+      pool:
+        size: 5
+# Quartz
+  quartz:
+    job-store-type: jdbc
+    scheduler-name: newcodeScheduler
 
 
-
+# mybatis-plus
 mybatis-plus:
   global-config:
     db-config:
       id-type: auto
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 关闭mybatis日志
+#    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl # 开启mybatis日志
     # 对自动生成的ID自动回填
     use-generated-keys: true
 
 
+# server properties
 server:
   port: 85
   servlet:
     context-path: /community
 
+
+# --------------others--------------
+
+# Quartz
+spting:
+  org:
+    quartz:
+      scheduler:
+        instanceName: AUTO
+      jobStore:
+        class: org.quartz.impl.jdbcjobstore.JobStoreTX
+        driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+        isClustered: true
+      threadPool:
+        class: org.quartz.simpl.SimpleThreadPool
+        threadCount: 5
+
+# --------------constant--------------
+
+# WK
+wk:
+  image:
+    command: /usr/local/bin/wkhtmltoimage
+    storage: /Users/liuzheran/Desktop/学习笔记/后端部分/springBoot/项目/NewCode/newCodeWKImages
+
+
 #community
 community:
+  epoch: 2014-08-01 00:00:00
   path:
     domain: http://localhost:85
     upload: /Users/liuzheran/Desktop/学习笔记/后端部分/springBoot/项目/NewCode/newCodeImages
 
+
+# qiniu
+qiniu:
+  key:
+    access: bqI_3vWhSY9yjaMw6oWv6PJljMz7iCXfafO4OFJS
+    secret: q2kqCa9DAhhDTLCQehwjSahMZVoS3BT-KpkajMLt
+  bucket:
+    share:
+      name: community-share-2302265572
+      url: http://rb5mroh78.hn-bkt.clouddn.com
+    header:
+      name: community-header-2302265572
+      url: http://rb5ktxiom.hn-bkt.clouddn.com
+
+
+#Caffeine
+caffeine:
+  posts:
+    max-size: 30 # 缓存的最大文件数，超过这个方法则被挤掉
+    expire-seconds: 180 # 自动过期时间3分钟，3分钟之后本地缓存消失

@@ -23,24 +23,27 @@ public class DiscussPostServiceImpl extends ServiceImpl<DiscussPostDao, DiscussP
 	SensitiveFilter sensitiveFilter;
 
 	/**
+	 * 默认页面的分页查询，排序规则为：是否置顶、创建时间
+	 *
 	 * @param userID
 	 * @param curPage
 	 * @param pageSize
 	 * @return com.baomidou.mybatisplus.core.metadata.IPage<com.example.newcode.entity.DiscussPost>
-	 * @author JLian 带有条件的分页查询
+	 * @author JLian
 	 * @date 2022/2/22 6:25 下午
 	 */
 
-	public IPage<DiscussPost> selectMapsPage(int userID, int curPage, int pageSize) {
-
+	public IPage<DiscussPost> selectMapsPage(int userID, int curPage, int pageSize, int useScore) {
 		Page<DiscussPost> postPage = new Page<>(curPage, pageSize);
 		QueryWrapper<DiscussPost> wrapper = new QueryWrapper<>();
-
+		// 如果userID = 0，则这行eq不生效，userID != 0时才生效
 		wrapper.eq(userID != 0, "user_id", userID);
 		wrapper.le("status", 1);
-		wrapper.orderByDesc("id");
-		Page<DiscussPost> discussPostPage = discussPostDao.selectPage(postPage, wrapper);
-		return discussPostPage;
+		if (useScore == 0)
+			wrapper.orderByDesc("type", "create_time");
+		else
+			wrapper.orderByDesc("type", "score", "create_time");
+		return  discussPostDao.selectPage(postPage, wrapper);
 	}
 
 	/**
@@ -103,6 +106,14 @@ public class DiscussPostServiceImpl extends ServiceImpl<DiscussPostDao, DiscussP
 		UpdateWrapper<DiscussPost> postUpdateWrapper = new UpdateWrapper<>();
 		postUpdateWrapper.eq("id", post.getId());
 		post.setStatus(status);
+		return discussPostDao.update(post, postUpdateWrapper) > 0;
+	}
+
+	@Override
+	public Boolean updateScore(DiscussPost post, double score) {
+		UpdateWrapper<DiscussPost> postUpdateWrapper = new UpdateWrapper<>();
+		postUpdateWrapper.eq("id", post.getId());
+		post.setScore(score);
 		return discussPostDao.update(post, postUpdateWrapper) > 0;
 	}
 }

@@ -16,7 +16,7 @@ public class DiscussPostServiceTest {
 
 	@Test
 	public void pageTest() {
-		IPage<DiscussPost> iPage = discussPostService.selectMapsPage(0, 1, 2);
+		IPage<DiscussPost> iPage = discussPostService.selectMapsPage(0, 1, 2, 0);
 		List<DiscussPost> records = iPage.getRecords();
 		for (DiscussPost record : records) {
 			System.out.println(record);
