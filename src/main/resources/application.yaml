@@ -68,6 +68,7 @@ server:
     context-path: /community
 
 
+
 # --------------others--------------
 
 # Quartz
@@ -120,3 +121,17 @@ caffeine:
   posts:
     max-size: 30 # 缓存的最大文件数，超过这个方法则被挤掉
     expire-seconds: 180 # 自动过期时间3分钟，3分钟之后本地缓存消失
+
+# Actuator EndPoints
+management:
+  endpoint:
+    health:
+      # 端点健康情况，默认值"never"，设置为"always"可以显示硬盘使用情况和线程情况
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        # 设置端点暴露的哪些内容，默认["health","info"]，设置"*"代表暴露所有可访问的端点
+        include: "*"
+        # 不允许暴露shutdown
+        exclude: "shutdown"

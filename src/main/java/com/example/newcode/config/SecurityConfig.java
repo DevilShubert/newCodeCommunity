@@ -42,11 +42,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements Comm
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// 配置需要授权检查的页面
-		http.authorizeRequests().antMatchers("/comment/add/**", "/follow", "/unfollow", "/followees/**",
-				"/followers/**", "/like", "/logout", "/letter/**", "/notice/**", "/discuss/add", "/user/setting",
-				"/user/upload", "/user/updatePassword", "/user/profile/**", "/discuss/delete").hasAnyAuthority(
-				AUTHORITY_USER, AUTHORITY_ADMIN, AUTHORITY_MODERATOR).antMatchers("/discuss/top", "/discuss/wonderful",
-				"/data/**").hasAnyAuthority(AUTHORITY_ADMIN).anyRequest().permitAll().and().csrf().disable();
+		http.authorizeRequests().antMatchers(
+				"/comment/add/**",
+				"/follow",
+				"/unfollow",
+				"/followees/**",
+				"/followers/**",
+				"/like",
+				"/logout",
+				"/letter/**",
+				"/notice/**",
+				"/discuss/add",
+				"/user/setting",
+				"/user/upload",
+				"/user/updatePassword",
+				"/user/profile/**",
+				"/discuss/delete").hasAnyAuthority(AUTHORITY_USER, AUTHORITY_ADMIN, AUTHORITY_MODERATOR).
+					antMatchers(
+							"/discuss/top",
+							"/discuss/wonderful",
+							"/data/**",
+							"/actuator/**").hasAnyAuthority(AUTHORITY_ADMIN).
+				anyRequest().permitAll().and().csrf().disable();
 
 		// 权限出问题情况
 		http.exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPoint() {
